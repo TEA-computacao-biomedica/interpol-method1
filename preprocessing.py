@@ -14,6 +14,7 @@ qtdNeigh0 = []
 channelsNeigh1 = []
 qtdNeigh1 = []
 
+
 # Função que ler o csv com os vizinhos de cada eletrodo e retorna um dataframe
  
 def create_df_Neighbor(path):
@@ -27,12 +28,10 @@ def create_df_Neighbor(path):
 
 # Função que encontra a posição do eletrodo faltante e insere uma coluna com nan ou 0 
 
-def insert_column(file, sep, dfNeighbors):
-
+def insert_column(df, dfNeighbors):
+  
   missElectrode = []
-
-  df = pd.read_csv(file, sep = sep, nrows = 3)
-
+  
   df.columns = df.columns.str.upper()
   
   for col in utils.CHANNELS:
@@ -48,24 +47,25 @@ def insert_column(file, sep, dfNeighbors):
   lenMiss = len(missElectrode)
   qtdMiss.append(lenMiss)
   channelsMiss.append(missElectrode) 
-
-  mean_neighbors(df, missElectrode, dfNeighbors)
+  
+  return missElectrode
 
 # Função que checa se existe algum eletrodo com menos de dois vizinhos
 
-def mean_neighbors(df, missElectrode, dfNeighbors):
+def remove_nan_neighbors(df, missElectrode, dfNeighbors):
  
   neigh0 = []
   neigh1 = []
-
+  
   for electrode in missElectrode:
     neighbors = dfNeighbors[electrode]
     neighbors = neighbors.dropna()
-
+    
     for neigh in neighbors:
-      if df[neigh].isna().any():
-        loc = neighbors.index[neighbors == neigh ][0]
-        neighbors[loc] = np.nan
+      if neigh in missElectrode:
+          loc = neighbors.index[neighbors == neigh ][0]
+          neighbors[loc] = np.nan
+              
         
     neighbors = neighbors.dropna()
 
@@ -74,6 +74,7 @@ def mean_neighbors(df, missElectrode, dfNeighbors):
       
     if len(neighbors) == 1:
       neigh1.append(electrode)
+      
 
   lenNeigh0 =  len(neigh0)
   lenNeigh1 =  len(neigh1)
@@ -83,21 +84,31 @@ def mean_neighbors(df, missElectrode, dfNeighbors):
   qtdNeigh1.append(lenNeigh1)
   qtdNeigh0.append(lenNeigh0)
   
+  
+def read_folder():
+  
+  csv_folder = glob.glob(os.path.join(utils.PATH_ARQ , "*.csv"))
+  dfNeighbors = create_df_Neighbor(utils.PATH_CORRELATION )
+  
+  for file in csv_folder:
+    fileName = os.path.basename(file)
+    nameFile.append(fileName)
+    
+    if fileName in utils.ARQ_SEP:
+        df = pd.read_csv(file, sep = ",", nrows = 3)
+        missElectro = insert_column(df, dfNeighbors)
+        remove_nan_neighbors(df, missElectro , dfNeighbors)
+        
+    else:
+        df = pd.read_csv(file, sep = "\t", nrows = 3)
+        missElectro  = insert_column(df, dfNeighbors)
+        remove_nan_neighbors(df, missElectro, dfNeighbors)
+
+
 
 if __name__ == "__main__":
-    csv_folder = glob.glob(os.path.join(utils.PATH_ARQ , "*.csv"))
 
-    dfNeighbors = create_df_Neighbor(utils.PATH_CORRELATION )
-
-    for file in csv_folder:
-        nameFolder = os.path.basename(file)
-        nameFile.append(nameFolder)
-        print("\n" + nameFolder)
-        if nameFolder in utils.ARQ_SEP:
-            insert_column(file, ",", dfNeighbors)
-        else:
-            insert_column(file, "\t", dfNeighbors)
-
+    read_folder()
     analysis['nameFile'] = nameFile
     analysis['channelsMiss'] = channelsMiss
     analysis['qtdMiss'] = qtdMiss
