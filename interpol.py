@@ -6,55 +6,40 @@ import ast
 import utils
 import preprocessing as pros
 
-# todo 1: unir os vetores das colunas 'channelsNeigh0' e 'channelsNeigh0' OK
-# todo 2: retirar o vetor concatenado do vetor de falatantes
-    # se for for vazio interpola tudo 
-    # se não for vazio interpola os eletrodos que não fazem parte do vetor (substrair )
-# todo 3: salvar a nova  
-# todo 4: rodar novamente o código de pré-processamento 
 
-
-def interpol(df, vectorResult, dfNeighbors, file):   
+def interpol(df, vectorResult, vectorMiss, dfNeighbors, nameFile):  
     
     for channel in vectorResult:
         neighbors = dfNeighbors[channel]
         neighbors = neighbors.dropna()
-        
+    
         for neigh in neighbors:
-            if neigh in vectorResult:
+            if neigh in vectorMiss:
                 loc = neighbors.index[neighbors == neigh ][0]
                 neighbors[loc] = np.nan
-                
-        neighbors = neighbors.dropna()
+                neighbors = neighbors.dropna()
         
-        for index in df.index:
-            meanNeighbors = df[neighbors].mean(axis=1)
-            #df.loc[index, channel] = meanNeighbors
-            print(f'values: \n{df[neighbors]}\n')
-            print(f'a média é: {meanNeighbors}\n')
-            #save_file(file, df)
+        for index, row in df.iterrows():
+            meanNeighbors = row[neighbors].mean()
+            df.loc[index, channel] = round(meanNeighbors,4)
             
-def save_file(file, df):
-    name_file = os.path.basename(file)
-    df.to_csv(utils.PATH_ARQ_NEW + "/" + name_file)     
+    save_file(nameFile, df)
+                      
+            
+def save_file(nameFile, df):
+    df.to_csv(utils.PATH_ARQ_NEW + "/" + nameFile)     
 
-def concate_neigh(df, dfNeighbors, file):
-    dfAnalysis = pd.read_csv(utils.PATH_ANALYSIS, sep = ",", nrows = 3)
-
-    for indice, file in dfAnalysis.iterrows():
-        print(f'file: {file["nameFile"]}')
-        vectorConcate =  ast.literal_eval(file["channelsNeigh0"]) + ast.literal_eval(file["channelsNeigh1"])
-        vectorMiss = ast.literal_eval(file['channelsMiss'])
-        vectorResult = [elemento for elemento in vectorMiss if elemento not in vectorConcate]
-        
-        #print(f'vetor de faltantes:{vectorMiss}\n')
-        #print(f'vetor concatenado: {vectorConcate}\n')
-        #print(f'vetor resultante: {vectorResult}\n')
-        
-        interpol(df, vectorResult, dfNeighbors, file)
-        
+def concate_neigh(df, dfNeighbors, fileName):
+    dfAnalysis = pd.read_csv(utils.PATH_ANALYSIS, sep = ",")
     
-
+    for index, row in dfAnalysis.iterrows():
+        if row['nameFile'] == fileName:
+            vectorMiss = ast.literal_eval(row['channelsMiss'])
+            vectorConcate =  ast.literal_eval(row["channelsNeigh0"]) + ast.literal_eval(row["channelsNeigh1"])
+            vectorResult = [elemento for elemento in vectorMiss if elemento not in vectorConcate]
+    
+    interpol(df, vectorResult, vectorMiss, dfNeighbors, fileName)      
+        
 def read_folder():
 
     csv_folder = glob.glob(os.path.join(utils.PATH_ARQ , "*.csv"))
@@ -62,19 +47,16 @@ def read_folder():
   
     for file in csv_folder:
         fileName = os.path.basename(file)
-        print(fileName)
         if fileName in utils.ARQ_SEP:
-            df = pd.read_csv(file, sep = ",", nrows = 3)
+            df = pd.read_csv(file, sep = ",")
+            df = df.drop('UNNAMED: 0', axis=1) 
             missElectro = pros.insert_column(df, dfNeighbors)
-            concate_neigh(df, dfNeighbors, file)
+            concate_neigh(df, dfNeighbors, fileName)
             
         else:
-            df = pd.read_csv(file, sep = "\t", nrows = 3)
+            df = pd.read_csv(file, sep = "\t")
             missElectro  = pros.insert_column(df, dfNeighbors)
-            concate_neigh(df, dfNeighbors, file)
-
-
-    
+            concate_neigh(df, dfNeighbors, fileName)
 
 if __name__ == "__main__":
     read_folder()

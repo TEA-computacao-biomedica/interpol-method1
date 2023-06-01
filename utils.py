@@ -1,7 +1,7 @@
-PATH_CORRELATION = "CANAIS UTILIZADOS - BASE EEG - Correlação.csv"
-PATH_ARQ = "./COMBINAÇÃO ASD+P"
+PATH_CORRELATION = "correlação.csv"
+PATH_ARQ = "./combinação_asd_p"
 PATH_ANALYSIS = "analise_faltantes.csv"
-PATH_ARQ_NEW = "./NEW ARQ"
+PATH_ARQ_NEW = "./arq_interpolados"
 
 
 CHANNELS = ['FP1', 'AF7', 'AF3', 'F1', 'F3', 'F5', 'F7', 'FT7',	'FC5', 'FC3', 'FC1', 'C1', 'C3', 'C5',	'T7', 'TP7', 'CP5',	'CP3', 'CP1', 'P1', 'P3', 'P5',	
