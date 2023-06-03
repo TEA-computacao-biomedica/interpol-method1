@@ -49,12 +49,15 @@ def read_folder():
         fileName = os.path.basename(file)
         if fileName in utils.ARQ_SEP:
             df = pd.read_csv(file, sep = ",")
-            df = df.drop('UNNAMED: 0', axis=1) 
+            if 'UNNAMED: 0' in df.columns:
+                df = df.drop('UNNAMED: 0', axis=1) 
             missElectro = pros.insert_column(df, dfNeighbors)
             concate_neigh(df, dfNeighbors, fileName)
             
         else:
             df = pd.read_csv(file, sep = "\t")
+            if 'UNNAMED: 0' in df.columns:
+                df = df.drop('UNNAMED: 0', axis=1) 
             missElectro  = pros.insert_column(df, dfNeighbors)
             concate_neigh(df, dfNeighbors, fileName)
 

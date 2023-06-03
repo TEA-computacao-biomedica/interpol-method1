@@ -107,17 +107,16 @@ def read_folder():
 
 
 if __name__ == "__main__":
+  read_folder()
+  analysis['nameFile'] = nameFile
+  analysis['channelsMiss'] = channelsMiss
+  analysis['qtdMiss'] = qtdMiss
 
-    read_folder()
-    analysis['nameFile'] = nameFile
-    analysis['channelsMiss'] = channelsMiss
-    analysis['qtdMiss'] = qtdMiss
+  analysis['channelsNeigh0'] = channelsNeigh0
+  analysis['channelsNeigh1'] = channelsNeigh1
 
-    analysis['channelsNeigh0'] = channelsNeigh0
-    analysis['channelsNeigh1'] = channelsNeigh1
+  analysis['qtdNeigh1'] = qtdNeigh1
+  analysis['qtdNeigh0'] = qtdNeigh0
 
-    analysis['qtdNeigh1'] = qtdNeigh1
-    analysis['qtdNeigh0'] = qtdNeigh0
-
-    analysis.to_csv('analise_faltantes.csv', index=False)
+  analysis.to_csv('analysis_missing.csv', index=False)
   
