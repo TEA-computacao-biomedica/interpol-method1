@@ -23,11 +23,9 @@ def interpol(df, vectorResult, vectorMiss, dfNeighbors, nameFile):
             meanNeighbors = row[neighbors].mean()
             df.loc[index, channel] = round(meanNeighbors,4)
             
-    save_file(nameFile, df)
+    pros.save_file(utils.PATH_FILES_INTERPOLED,nameFile, df)
                       
-            
-def save_file(nameFile, df):
-    df.to_csv(utils.PATH_ARQ_NEW + "/" + nameFile)     
+               
 
 def concate_neigh(df, dfNeighbors, fileName):
     dfAnalysis = pd.read_csv(utils.PATH_ANALYSIS, sep = ",")
@@ -42,7 +40,7 @@ def concate_neigh(df, dfNeighbors, fileName):
         
 def read_folder():
 
-    csv_folder = glob.glob(os.path.join(utils.PATH_ARQ , "*.csv"))
+    csv_folder = glob.glob(os.path.join(utils.PATH_FILES , "*.csv"))
     dfNeighbors = pros.create_df_Neighbor(utils.PATH_CORRELATION )
   
     for file in csv_folder:

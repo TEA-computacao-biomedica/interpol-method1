@@ -1,7 +1,7 @@
 PATH_CORRELATION = "correlation.csv"
-PATH_ARQ = "./combination_asd_p"
+PATH_FILES = "./combination_asd_p"
 PATH_ANALYSIS = "analysis_missing.csv"
-PATH_ARQ_NEW = "./files_interpolated"
+PATH_FILES_INTERPOLED = "./files_interpolated"
 
 
 CHANNELS = ['FP1', 'AF7', 'AF3', 'F1', 'F3', 'F5', 'F7', 'FT7',	'FC5', 'FC3', 'FC1', 'C1', 'C3', 'C5',	'T7', 'TP7', 'CP5',	'CP3', 'CP1', 'P1', 'P3', 'P5',	

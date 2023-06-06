@@ -83,11 +83,14 @@ def remove_nan_neighbors(df, missElectrode, dfNeighbors):
   channelsNeigh1.append(neigh1)
   qtdNeigh1.append(lenNeigh1)
   qtdNeigh0.append(lenNeigh0)
+
+def save_file(path, nameFile, df):
+    df.to_csv(path + "/" + nameFile, index= False)  
   
   
 def read_folder():
   
-  csv_folder = glob.glob(os.path.join(utils.PATH_ARQ , "*.csv"))
+  csv_folder = glob.glob(os.path.join(utils.PATH_FILES , "*.csv"))
   dfNeighbors = create_df_Neighbor(utils.PATH_CORRELATION )
   
   for file in csv_folder:
@@ -117,6 +120,7 @@ if __name__ == "__main__":
 
   analysis['qtdNeigh1'] = qtdNeigh1
   analysis['qtdNeigh0'] = qtdNeigh0
+  
+  save_file( './','analysis_missing.csv', analysis)
 
-  analysis.to_csv('analysis_missing.csv', index=False)
   
