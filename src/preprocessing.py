@@ -2,7 +2,7 @@ import os
 import glob
 import numpy as np
 import pandas as pd
-import src.utils as utils
+import utils as utils
 
 analysis = pd.DataFrame(columns=['nameFile', 'channelsMiss', 'qtdMiss', 'channelsNeigh0',  'qtdNeigh0', 'channelsNeigh1',  'qtdNeigh1' ])
 

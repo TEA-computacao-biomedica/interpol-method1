@@ -3,8 +3,8 @@ import glob
 import pandas as pd
 import numpy as np
 import ast
-import src.utils as utils
-import src.preprocessing as pros
+import utils as utils
+import preprocessing as pros
 
 def first_interpol(df, vectorResult, vectorMiss, dfNeighbors, nameFile, path):  
     
