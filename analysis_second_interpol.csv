@@ -1,0 +1,13 @@
+FileName,MissingChannels,QuantityMC,OneNeighbor,Quantity1N,ZeroNeighbors,Quantity0N,FinalList4Interpol
+2_ASD.csv,"['FT7', 'FC5', 'C5', 'CP5','T7','TP7']",6,"['FT7','C5', 'TP7']",3,['T7'],1,"['FC5','CP5']"
+5_ASD.csv,['TP7'],1,[],0,[],0,['TP7']
+22_ASD.csv,['FC4'],1,[],0,[],0,['FC4']
+29_ASD.csv,"['F6', 'F8', 'FC6','FT8','T8']",5,['F8'],1,['FT8'],1,"['F6', 'F8', 'FC6']"
+1_P.csv,"['FT7', 'F8','F7']",3,[],0,[],0,"['FT7', 'F8','F7']"
+5_P.csv,"['T7', 'TP7', 'P9', 'F8', 'P8', 'P10']",6,[],0,[],0,"['T7', 'TP7', 'P9', 'F8', 'P8', 'P10']"
+9_P.csv,['FP1'],1,[],0,[],0,['FP1']
+17_P.csv,"['F8', 'FT8']",2,[],0,[],0,"['F8', 'FT8']"
+24_P.csv,"['FPZ', 'FP2','FP1']",3,['FPZ'],1,[],0,"['FP2','FP1']"
+52_P.csv,['FP2'],1,[],0,[],0,['FP2']
+54_P.csv,"['FT7', 'T7']",2,[],0,[],0,"['FT7', 'T7']"
+55_P.csv,['C4'],1,[],0,[],0,['C4']

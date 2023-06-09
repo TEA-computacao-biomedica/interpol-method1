@@ -6,8 +6,7 @@ import ast
 import utils
 import preprocessing as pros
 
-
-def interpol(df, vectorResult, vectorMiss, dfNeighbors, nameFile):  
+def first_interpol(df, vectorResult, vectorMiss, dfNeighbors, nameFile, path):  
     
     for channel in vectorResult:
         neighbors = dfNeighbors[channel]
@@ -23,9 +22,24 @@ def interpol(df, vectorResult, vectorMiss, dfNeighbors, nameFile):
             meanNeighbors = row[neighbors].mean()
             df.loc[index, channel] = round(meanNeighbors,4)
             
-    pros.save_file(utils.PATH_FILES_INTERPOLED,nameFile, df)
-                      
-               
+    pros.save_file(path, nameFile, df)
+       
+def second_interpol():
+    csv_folder = glob.glob(os.path.join(utils.PATH_FILES_INTERPOLATED, "*.csv")) 
+    dfSecondInterpol = pd.read_csv(utils.PATH_ANALYSIS_SECOND_INTERPOLATED, sep = ",")
+    dfNeighbors = pros.create_df_Neighbor(utils.PATH_CORRELATION )
+    
+    for file in csv_folder:
+        fileName = os.path.basename(file)
+        if fileName in utils.FILES_SECOND_INTERPOLATED:
+            df = pd.read_csv(file, sep = ",")
+            vectorResult = ast.literal_eval(dfSecondInterpol.loc[dfSecondInterpol['FileName'] == fileName, 'FinalList4Interpol'].item())
+            vectorMiss = ast.literal_eval(dfSecondInterpol.loc[dfSecondInterpol['FileName'] == fileName, 'MissingChannels'].item())
+            first_interpol(df, vectorResult, vectorMiss, dfNeighbors, fileName, utils.PATH_FILES_SECOND_INTERPOLATED)
+        
+
+
+
 
 def concate_neigh(df, dfNeighbors, fileName):
     dfAnalysis = pd.read_csv(utils.PATH_ANALYSIS, sep = ",")
@@ -36,11 +50,13 @@ def concate_neigh(df, dfNeighbors, fileName):
             vectorConcate =  ast.literal_eval(row["channelsNeigh0"]) + ast.literal_eval(row["channelsNeigh1"])
             vectorResult = [elemento for elemento in vectorMiss if elemento not in vectorConcate]
     
-    interpol(df, vectorResult, vectorMiss, dfNeighbors, fileName)      
-        
-def read_folder():
+    first_interpol(df, vectorResult, vectorMiss, dfNeighbors, fileName, utils.PATH_FILES_SECOND_INTERPOLATED)     
 
-    csv_folder = glob.glob(os.path.join(utils.PATH_FILES , "*.csv"))
+    
+        
+def read_folder(path):
+
+    csv_folder = glob.glob(os.path.join(path, "*.csv"))
     dfNeighbors = pros.create_df_Neighbor(utils.PATH_CORRELATION )
   
     for file in csv_folder:
@@ -60,4 +76,5 @@ def read_folder():
             concate_neigh(df, dfNeighbors, fileName)
 
 if __name__ == "__main__":
-    read_folder()
+    #read_folder(utils.PATH_FILES)
+    second_interpol()

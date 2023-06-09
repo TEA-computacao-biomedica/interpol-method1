@@ -85,7 +85,7 @@ def remove_nan_neighbors(df, missElectrode, dfNeighbors):
   qtdNeigh0.append(lenNeigh0)
 
 def save_file(path, nameFile, df):
-    df.to_csv(path + "/" + nameFile, index= False)  
+    df.to_csv(''.join(path) + "/" + nameFile, index= False)  
   
   
 def read_folder():
